@@ -7,51 +7,52 @@ include 'db_connect.php';
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>야구 빅데이터 분석</title>
+    <title>Baseball Analytics</title>
+    <link rel="stylesheet" href="css/main.css"/>
     <style>
         body { font-family: sans-serif; margin: 20px; }
-        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 10px;}
+        .header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px;}
         .header h1 { margin: 0; }
         .login-menu { text-align: right; }
-        nav { margin-top: 15px; }
-        nav a { margin-right: 15px; text-decoration: none; font-size: 1.1em; }
+        /* nav { margin-top: 15px; }
+        nav a { margin-right: 15px; text-decoration: none; font-size: 1.1em; } */
     </style>
 </head>
 <body>
-    
+    <div class="layout">
     <!-- 로그인/회원가입  -->
-    <div class="header">
-        <h1>team08 칼퇴기원</h1>
-        
-        <div class="login-menu">
-            <?php if (isset($_SESSION['userid'])): ?>
+        <!-- <div class="login-menu"> -->
+            <!-- ?php if (isset($_SESSION['userid'])): ?> -->
                 <!-- 1. 로그인 성공 -->
-                <p>
-                    <strong><?php echo htmlspecialchars($_SESSION['username']); ?></strong>님 환영합니다!
-                </p>
-                <a href="mypage.php">마이페이지</a> | 
-                <a href="logout_process.php">로그아웃</a>
+                <!-- <p> -->
+                    <!-- <strong><?php echo htmlspecialchars($_SESSION['username']); ?></strong>님 환영합니다! -->
+                <!-- </p> -->
+                <!-- <a href="mypage.php">My Page</a> |  -->
+                <!-- <a href="logout_process.php">Logout</a> -->
                 
-            <?php else: ?>
+            <!-- ?php else: ?> -->
                 <!-- 2. 로그인 안 됨 -->
-                <p>로그인이 필요합니다.</p>
-                <a href="login.php">로그인</a> | 
-                <a href="register.php">회원가입</a>
+                <!-- <p>You need to Login.</p> -->
+                <!-- <a href="login.php">Login</a> |  -->
+                <!-- <a href="register.php">Sign Up</a> -->
                 
-            <?php endif; ?>
-        </div>
-    </div>
-
-    <nav>
-        <a href="index.php">홈</a> |
-        <a href="#">선수별 분석</a> |
-        <a href="#">팀별 분석</a> |
-        <a href="#">시즌/경기별 분석</a>
-    </nav>
+            <!-- ?php endif; ?> -->
+        <!-- </div> -->
+        <?php
+        include 'pages/nav.php';
+        ?>
     
-    <hr>
+    <h1>Baseball Analytics</h1>
+    <!-- <nav>
+        <a href="index.php">Home</a> |
+        <a href="#">Analytics by Player</a> |
+        <a href="#">Analytics by Team</a> |
+        <a href="#">Analytics by Season/Play(경기)</a>
+    </nav> -->
     
-    <h2>프로젝트 홈</h2>
+    <!-- <hr> -->
+    
+    <h2>Project Home</h2>
     <p>프로젝트 개요, 팀원 소개 등</p>
     
     
@@ -78,4 +79,5 @@ include 'db_connect.php';
         $conn->close();
     ?>
 </body>
+</div>
 </html>
