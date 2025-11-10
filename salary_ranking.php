@@ -10,37 +10,62 @@ $year = isset($_GET['year']) ? intval($_GET['year']) : 2015;
 <html>
 <head>
     <title>선수 연봉 순위</title>
+    <link rel="stylesheet" href="css/main.css"/>
     <style>
         body { font-family: sans-serif; margin: 20px; }
-        h1, h2 { text-align: center; }
-        form { text-align: center; margin-bottom: 20px; }
-        table { border-collapse: collapse; width: 80%; margin: 0 auto; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #f2f2f2; text-align: center; }
-        tr:nth-child(even) { background-color: #f9f9f9; }
+        form { 
+            /* text-align: center; */
+             margin-bottom: 20px; }
+        table { border-collapse: collapse; width: 80%; 
+            /* margin: 0 auto; */
+         }
+        th, td { border: 1px solid #ddd; padding: 8px; 
+            text-align: left; 
+        }
+        th { background-color: var(--background-color); 
+            text-align: center; 
+        }
+        tr:nth-child(even) { background-color: var(--background-color); }
         td:first-child, td:last-child { text-align: center; }
         td:nth-child(4) { text-align: right; }
+        .form_horizontal{width:220px;}
+        .numBtn{
+            background-color:var(--background-color);
+            color: var(--text-color);
+            height: 100%;
+            width: auto;
+        }
     </style>
 </head>
 <body>
-
-    <h1>선수 연봉 순위 (Ranking)</h1>
-    
+    <div class="layout">
+    <h1>Get Annual Salary Ranking <br/>by player with your form.</h1>
+    <div !font-size:18>
+        Get annual salary ranking by player with your form.<br/>
+        you can filter the players by team, position, etc.  
+    </div>
     <form action="salary_ranking.php" method="GET">
-        <label for="year">연도:</label>
-        <input type"number" id="year" name="year" 
-               value="<?php echo htmlspecialchars($year); ?>" 
-               min="1985" max="2015"> <input type="submit" value="연봉 순위 조회">
+        <div class="form_horizontal">
+            <div><label for="year">Year</label></div><div>></div>
+            <div>
+                <button class="numBtn" onclick="this.parentNode.querySelector('#year').stepDown()">-</button>
+                <input type="number" id="year" name="year" 
+                    value="<?php echo htmlspecialchars($year); ?>" 
+                    min="1985" max="2015"> 
+                <button class="numBtn" onclick="this.parentNode.querySelector('#year').stepUp()">+</button>
+            </div>
+        </div>
+        <div><input id="btn" type="submit" value="Get Result"></div>
     </form>
 
-    <h2><?php echo htmlspecialchars($year); ?>년 연봉 TOP 100</h2>
+    <h2> Annual Salary Ranking <?php echo htmlspecialchars(string: $year); ?>:TOP 100</h2>
     
     <table>
         <tr>
-            <th>순위</th>
-            <th>선수 이름</th>
-            <th>팀 이름</th>
-            <th>연봉</th>
+            <th>Rank</th>
+            <th>Player</th>
+            <th>Team</th>
+            <th>Annual Salary</th>
         </tr>
         <?php
         
@@ -85,7 +110,8 @@ $year = isset($_GET['year']) ? intval($_GET['year']) : 2015;
         ?>
     </table>
     
-    <p style-align:center;"><a href="index.php">메인으로</a></p>
+    <p style-align:center><a href="index.php">Go main</a></p>
 
 </body>
+</div>
 </html>
