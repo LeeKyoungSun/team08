@@ -67,7 +67,9 @@ $lg = isset($_GET['lg']) ? $_GET['lg'] : 'NL';
 </head>
 <body>
     <div class="layout">
-        
+        <?php
+        include 'pages/nav.php';
+        ?>
     <h1>Get Team Score Ranking in Each Year and League</h1>
     <div !font-size:18>
         Get Team score ranking in season with your form.<br/>

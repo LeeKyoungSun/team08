@@ -86,3 +86,11 @@ table{
 #userPage #btn {
     text-align: center;
 }
+.numBtn {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    width: 42px;
+    height: 42px;
+    font-size: 18px;
+    margin: auto 0;
+}
