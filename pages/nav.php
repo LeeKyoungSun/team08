@@ -79,7 +79,7 @@
                 <a href="#">Analytics by Player</a> 
                 <ul>
                     <li><a href="player_score_trend.php">Score Trend</a></li>
-                    <li><a href="player_score_position.php">Score Position</a></li>
+                    <li><a href="stats_per_position.php">Stats per Position</a></li>
                     <li><a href="salary_ranking.php">Salary Ranking</a></li>
                 </ul>
             </li>
@@ -87,7 +87,7 @@
                 <a href="#">Analytics by Team</a> 
                 <ul>
                     <li><a href="team_ranking.php">Score Ranking</a></li>
-                    <li><a href="team_salary_olap.php">Salary</a></li>
+                    <li><a href="salary_diff.php">Salary</a></li>
                 </ul>
             </li>
             <li>
