@@ -53,8 +53,19 @@ if (isset($_GET['action'])) {
     if ($_GET['action'] === 'getStats' && isset($_GET['playerID'])) {
         $playerID = $_GET['playerID'];
 
+        // Window 함수를 사용한 쿼리
         $sql = "
-            WITH PlayerStats AS (
+            SELECT
+                p.yearID,
+                t.name AS teamName,
+                p.G,
+                p.AB,
+                p.H,
+                p.HR,
+                p.hr_change,
+                p.battingAvg,
+                p.avg_change
+            FROM (
                 SELECT
                     playerID,
                     yearID,
@@ -65,29 +76,19 @@ if (isset($_GET['action'])) {
                     H,
                     HR,
                     CASE WHEN AB > 0 THEN ROUND(H / AB, 3) ELSE 0.000 END AS battingAvg,
-                    LAG(HR, 1, 0) OVER (PARTITION BY playerID ORDER BY yearID) AS prev_HR,
-                    LAG(CASE WHEN AB > 0 THEN ROUND(H / AB, 3) ELSE 0.000 END, 1, 0.0) OVER (PARTITION BY playerID ORDER BY yearID) AS prev_battingAvg
+                    (HR - LAG(HR, 1, 0) OVER (PARTITION BY playerID ORDER BY yearID)) AS hr_change,
+                    ROUND(
+                        CASE WHEN AB > 0 THEN ROUND(H / AB, 3) ELSE 0.000 END -
+                        LAG(CASE WHEN AB > 0 THEN ROUND(H / AB, 3) ELSE 0.000 END, 1, 0.0) OVER (PARTITION BY playerID ORDER BY yearID),
+                        3
+                    ) AS avg_change
                 FROM
                     Batting
                 WHERE
-                    playerID = ?
-            )
-            SELECT
-                p.yearID,
-                t.name AS teamName,
-                p.G,
-                p.AB,
-                p.H,
-                p.HR,
-                (p.HR - p.prev_HR) AS hr_change,
-                ROUND(p.battingAvg, 3) AS battingAvg,
-                ROUND(p.battingAvg - p.prev_battingAvg, 3) AS avg_change
-            FROM
-                PlayerStats p
+                    playerID = ? AND AB > 50
+            ) p
             JOIN
                 Teams t ON p.teamID = t.teamID AND p.yearID = t.yearID AND p.lgID = t.lgID
-            WHERE
-                p.AB > 50
             ORDER BY
                 p.yearID ASC
         ";
