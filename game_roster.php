@@ -1,7 +1,7 @@
 <?php
 /*
  * game_roster.php: GROUP BY WITH ROLLUP을 사용하여 경기별 출전 명단과 포지션별 인원수를 집계
-
+ * 프론트엔드: 연도 선택 → 경기 선택 (드롭다운), 원 그래프
  */
 
 // 1. DB 연결
@@ -39,29 +39,38 @@ if (isset($_GET['action'])) {
         exit;
     }
 
-    // 경기별 포지션 분포 데이터 조회 (startingPos는 INT 타입)
+    // 경기별 포지션 분포 데이터 조회
     if ($_GET['action'] === 'getRoster' && isset($_GET['gameID'])) {
         $gameID = $_GET['gameID'];
 
+        // ROLLUP 결과를 서브쿼리로 감싸서 ORDER BY 적용
         $sql = "
             SELECT
-                CASE
-                    WHEN a.startingPos IS NULL THEN 'Total'
-                    ELSE CAST(a.startingPos AS CHAR)
-                END AS position,
-                '' AS firstName,
-                '' AS lastName,
-                COUNT(*) AS playerCount
-            FROM
-                AllstarFull a
-            WHERE
-                a.gameID = ?
-            GROUP BY
-                a.startingPos WITH ROLLUP
+                position,
+                firstName,
+                lastName,
+                playerCount
+            FROM (
+                SELECT
+                    CASE
+                        WHEN a.startingPos IS NULL THEN 'Total'
+                        ELSE CAST(a.startingPos AS CHAR)
+                    END AS position,
+                    '' AS firstName,
+                    '' AS lastName,
+                    COUNT(*) AS playerCount,
+                    a.startingPos AS sortPos
+                FROM
+                    AllstarFull a
+                WHERE
+                    a.gameID = ?
+                GROUP BY
+                    a.startingPos WITH ROLLUP
+            ) AS subquery
             ORDER BY
-                CASE WHEN a.startingPos IS NULL THEN 1 ELSE 0 END,
+                CASE WHEN sortPos IS NULL THEN 1 ELSE 0 END,
                 playerCount DESC,
-                a.startingPos ASC
+                sortPos ASC
         ";
 
         $stmt = $conn->prepare($sql);
