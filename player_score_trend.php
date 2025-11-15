@@ -42,10 +42,13 @@ include 'db_connect.php';
         </select>
     </div>
     <div>
+      <div>
         <label for="playerSelect">Player > </label>
         <select id="playerSelect" disabled>
             <option value="">-- Select Team First --</option>
         </select>
+      </div>
+      <div><button id="btn" disabled> Get Result </button></div>
     </div>
   </div>
 
@@ -74,6 +77,7 @@ include 'db_connect.php';
     const teamSelect = document.getElementById("teamSelect");
     const playerSelect = document.getElementById("playerSelect");
     const ctx = document.getElementById("playerChart").getContext("2d");
+    const getResult = document.getElementById("btn");
     let chartInstance = null;
 
 
@@ -106,17 +110,12 @@ include 'db_connect.php';
       }
       playerSelect.disabled = false;
     });
-
+    playerSelect.addEventListener("change",()=>{
+      getResult.disabled=false;
+    })
     // 선수 선택 시 그래프 표시
-    playerSelect.addEventListener("change", () => {
+    getResult.addEventListener("click", () => {
       const playerID = playerSelect.value;
-      // if (!playerID) return;
-
-      // const stats = playerStats[playerID];
-      // const labels = [];
-      // const hr = [];
-      // const rbi = [];
-      // const avg = [];
 
       if(playerID){
         fetch(`player_trend.php?action=getStats&playerID=${playerID}`)

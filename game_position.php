@@ -73,7 +73,7 @@ include 'db_connect.php';
            </div>
        </div>
 
-       <button id="searchBtn" disabled> Get Result </button>
+       <button id="btn" disabled> Get Result </button>
    </div>
 
    <div id="loadingDiv" class="loading" style="display:none;">
@@ -135,7 +135,7 @@ include 'db_connect.php';
                 years.forEach(year => {
                     const option = document.createElement('option');
                     option.value = year;
-                    option.textContent = `${year}년`;
+                    option.textContent = `${year}`;
                     select.appendChild(option);
                 });
             })
@@ -146,7 +146,7 @@ include 'db_connect.php';
     document.getElementById('yearSelect').addEventListener('change', function() {
         const yearID = this.value;
         const gameSelect = document.getElementById('gameSelect');
-        const searchBtn = document.getElementById('searchBtn');
+        const searchBtn = document.getElementById('btn');
 
         gameSelect.innerHTML = '<option value="">Select Game</option>';
         gameSelect.disabled = true;
@@ -175,12 +175,12 @@ include 'db_connect.php';
 
     // 경기 선택 시 버튼 활성화
     document.getElementById('gameSelect').addEventListener('change', function() {
-        const searchBtn = document.getElementById('searchBtn');
+        const searchBtn = document.getElementById('btn');
         searchBtn.disabled = !this.value;
     });
 
     // 조회 버튼 클릭
-    document.getElementById('searchBtn').addEventListener('click', function() {
+    document.getElementById('btn').addEventListener('click', function() {
         const gameID = document.getElementById('gameSelect').value;
         if (!gameID) return;
 
