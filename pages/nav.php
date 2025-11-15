@@ -100,18 +100,22 @@
             <li class="login-menu">
             <?php if (isset($_SESSION['userid'])): ?>
                     <!-- 1. 로그인 성공 -->
-                    <p>
-                        <strong><?php echo htmlspecialchars($_SESSION['username']); ?></strong>님 환영합니다!
-                    </p>
-                    <a href="mypage.php">My Page</a> |
-                    <a href="logout_process.php">Logout</a>
-            
+                    <a>
+                        <strong>Welcome <?php echo htmlspecialchars($_SESSION['username']); ?></strong>!
+                    </a>
+                    <ul>
+                    <li><a href="mypage.php">My Page</a></li> 
+                    <li><a href="logout_process.php">Logout</a></li>
+                    </ul>
                 <?php else: ?>
                     <!-- 2. 로그인 안 됨 -->
                     <!-- <p>You need to Login.</p> -->
-                    <a href="login.php">Login</a> |
-                    <a href="register.php">Sign Up</a>
-            
+                    <a>Login | Sign Up</a>
+                    <ul>
+                        <li><a href="login.php">Login</a></li> 
+                        <li><a href="register.php">Sign Up</a></li>
+                    </ul>
+                 
                 <?php endif; ?>
             </li>
         </ul>

@@ -274,7 +274,7 @@ function mf($v, $dec = 0) { // money format
         <td><?php echo $crossSentence; ?></td>
       </tr><br /><?php endif; ?>
   </table>
-  <br/><br/><br/>
+
 <?php else: ?>
   <p>You need AL/NL data both to make conclusion</p>
 <?php endif; ?>
