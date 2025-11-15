@@ -2,6 +2,7 @@
     /* 🎨 색상 팔레트 */
     --background-color: #000000;
     --accent-color: #296677;
+    --secondary-accent-color:#80B0BD;
     --text-color: #dee2e6;
     --secondary-text-color: #FAFAF8;
     
@@ -71,6 +72,10 @@ table{
     background-color: var(--secondary-text-color);
     border: var(--text-color) 1px solid ;
     color: var(--background-color);
+}
+th {
+    background-color: var(--accent-color);
+    text-align: center;
 }
 #userPage input {
      width: 500px ;

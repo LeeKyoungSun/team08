@@ -50,7 +50,7 @@ include 'db_connect.php';
             border: 1px solid #ddd; padding: 8px; 
         }
         tr:last-child{
-            background-color: #80B0BD;
+            background-color: var(--secondary-accent-color);
         }
         .chart-wrapper{
             max-width: 600px;

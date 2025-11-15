@@ -87,14 +87,14 @@
                 <a href="#">Analytics by Team</a> 
                 <ul>
                     <li><a href="team_ranking.php">Score Ranking</a></li>
-                    <li><a href="team_salary_olap.php">Salary</a></li>
+                    <li><a href="team_salary_olap.php">Salary Comparison</a></li>
                 </ul>
             </li>
             <li>
                 <a href="#">Analytics by Season/Game</a> 
                 <ul>
-                    <li><a href="game_salary_olap.php">salary</a></li>
-                    <li><a href="game_position.php">position</a></li>
+                    <li><a href="game_position.php">Position Distribution</a></li>
+                    <li><a href="game_salary_olap.php">Salary Comparison</a></li>
                 </ul>
             </li>
             <li class="login-menu">
