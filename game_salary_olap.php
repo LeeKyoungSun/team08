@@ -1,148 +1,248 @@
 <?php
 session_start();
-include 'db_connect.php';
+include 'db_connect.php'; 
+
+$year = isset($_GET['year']) ? intval($_GET['year']) : 2015;
+
+$sql_summary = "
+  SELECT
+    lgID,
+    COUNT(DISTINCT playerID) AS PlayerCount,
+    COUNT(DISTINCT teamID)   AS TeamCount,
+    SUM(salary)              AS TotalSalary,
+    AVG(salary)              AS AvgSalary
+  FROM Salaries
+  WHERE yearID = ?
+  GROUP BY lgID WITH ROLLUP
+";
+
+
+$stmt = $conn->prepare($sql_summary);
+$stmt->bind_param("i", $year);
+$stmt->execute();
+$rs = $stmt->get_result();
+
+$overall = null; $AL = null; $NL = null;
+while ($row = $rs->fetch_assoc()) {
+  if (is_null($row['lgID'])) $overall = $row;
+  elseif ($row['lgID'] === 'AL') $AL = $row;
+  elseif ($row['lgID'] === 'NL') $NL = $row;
+}
+$stmt->close();
+
+
+function mf($v, $dec = 0) { // money format
+  if ($v === null) return '-';
+  $num = $dec > 0 ? number_format((float)$v, $dec) : number_format((float)$v);
+  return '$' . $num;
+}
 ?>
+
 
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
-    <meta charset="UTF-8">
-    <title>player Score Trend</title>
-    <link rel="stylesheet" href="css/main.css" />
-    <style>
-        .header {
-            /* display: flex; */
-            justify-content: space-between;
-            align-items: center;
-            padding-bottom: 10px;
-        }
+<meta charset="UTF-8" />
+<title>Salary Comparison by League</title>
+<link rel="stylesheet" href="css/main.css" />
 
-        .header h1 {
-            margin: 0;
-        }
-        .layout{
-            overflow:hidden;
-        }
-        .cardLayout{
-            display: inline-flex;
-            overflow-x: scroll;
-            /* width: 100%; */
-        }
-        .card{
-            background-color: var(--secondary-text-color);
-            width: 250px;
-            height: 200px;
-            margin: 0 30px;
-        }
-    </style>
+<style>
+  :root { --card-w: 420px; }
+  /* body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; margin: 26px; }
+  h1 { text-align: center; margin: 6px 0 12px; }
+  form { text-align: center; margin: 10px 0 22px; }
+  form input, form button { padding: 8px 12px; font-size: 14px; }
+  form button { cursor: pointer; } */
+
+  .wrap {
+    display: flex;
+    justify-content: space-around;
+    grid-template-columns: repeat(3, minmax(280px, var(--card-w)));
+    gap: 16px;
+    align-items: start;
+  }
+  @media (max-width: 1200px) {
+    .wrap { grid-template-columns: repeat(2, minmax(280px, 1fr)); }
+  }
+  @media (max-width: 800px) {
+    .wrap { grid-template-columns: minmax(280px, 1fr); }
+  }
+
+  .card {
+    background: #fff;
+    border: 1px solid #e6e6e6;
+    border-radius: 14px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.04);
+    padding: 14px 16px 12px;
+    color: black;
+  }
+  .card h2 { font-size: 18px; margin: 2px 0 10px; }
+
+  table { border-collapse: collapse; width: 100%; }
+  th, td { border: 1px solid #eee; padding: 10px 12px; }
+  th { 
+    /* background: #f7f8fb;  */
+    text-align: center; }
+  td { text-align: right; }
+  td:first-child, th:first-child { text-align: center; }
+
+  .muted { text-align: center; color:#666; font-size: 13px; margin-top: 12px; }
+
+  .league-rows {
+    margin-top: 28px;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(320px, 560px));
+    gap: 18px;
+    justify-content: center;
+  }
+  @media (max-width: 1000px) {
+    .league-rows { grid-template-columns: minmax(320px, 1fr); }  }
+  .subhead { text-align:center; margin: 34px 0 12px; font-size: 20px; }
+  td{text-align:center}
+  .card{max-width:980px;margin: 28px auto;}
+  .card h2 {margin: 4px 0 10px;}
+
+  .form_horizontal{width:250px}
+  /* number 안의 상하 버튼 삭제 */
+  /* chrome 등 */
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+  }
+
+  /* Firefox */
+  input[type=number] {
+  -moz-appearance: textfield;
+  }
+</style>
 </head>
-
 <body>
-    <div class="layout">
-        <?php
-        include 'pages/nav.php';
-        ?>
-        <h1>Get Salary Comparison by League <br/>in specific year </h1>
-        <div>
-            Get Salary Comparison by League in specific year<br/>
-            you can filter the year and Get the result.
-        </div>
-   <div class="form-section">
-       <div class="form-row">
-           <div class="form-group">
-               <label for="yearSelect"> Year </label>
-               <select id="yearSelect">
-                   <option value="">-- Select Year --</option>
-               </select>
-           </div>
-       </div>
+  <div class="layout">
 
-       <button id="searchBtn" > Get Result </button>
-   </div>
+  <?php
+  include 'pages/nav.php';
+  ?>
+  <h1>Salary Comparison by League</h1>
 
-   <div id="loadingDiv" class="loading" style="display:none;">
-       Loading Data
-   </div>
+<form method="GET" action="game_salary_olap.php">-
+  <div>
+      Get Salary Comparison.<br/>
+      You can filter the data by year (1985-2015).
+  </div>
+  <div class="form_horizontal">
+    <div><label for="year">Year</label></div><div>></div>
+    <div>
+      <button class="numBtn" type="button" onclick="this.parentNode.querySelector('#year').stepDown()">-</button>
+      <input type="number" id="year" name="year" value="<?php echo htmlspecialchars($year); ?>" min="1985" max="2015" />
+      <button class="numBtn" type="button" onclick="this.parentNode.querySelector('#year').stepUp()">+</button>
+    </div>
+  </div>
+  <div><input type="submit" id="btn" value="Get Result"></input></div>
+ 
+</form>
 
-   <div id="errorDiv" class="error-message" style="display:none;"></div>
-   
-   <!-- 선택한 연도의 리그별 연봉 비교 -->
-   <div class="cardLayout">
-        <div class="card">
+<!-- 전체 합계,  리그별 소계-->
+<div class="wrap">
+  <section class="card">
+    <h2>Total</h2>
+    <?php if ($overall): ?>
+      <table>
+        <tr><th>Index</th><th>Value</th></tr>
+        <tr><td>Number of Player</td><td><?php echo number_format($overall['PlayerCount']); ?></td></tr>
+        <tr><td>Number of Team</td><td><?php echo number_format($overall['TeamCount']); ?></td></tr>
+        <tr><td>Total Salary</td><td><?php echo mf($overall['TotalSalary']); ?></td></tr>
+        <tr><td>Average Salary</td><td><?php echo mf($overall['AvgSalary'], 2); ?></td></tr>
+      </table>
+    <?php else: ?>
+      <p>There's no data.</p>
+    <?php endif; ?>
+  </section>
 
-        </div>
-        <div class="card">
+  <section class="card">
+    <h2>League AL</h2>
+    <?php if ($AL): ?>
+      <table>
+        <tr><th>Index</th><th>Value</th></tr>
+        <tr><td>Number of Player</td><td><?php echo number_format($AL['PlayerCount']); ?></td></tr>
+        <tr><td>Number of Team</td><td><?php echo number_format($AL['TeamCount']); ?></td></tr>
+        <tr><td>Total Salary</td><td><?php echo mf($AL['TotalSalary']); ?></td></tr>
+        <tr><td>Average Salary</td><td><?php echo mf($AL['AvgSalary'], 2); ?></td></tr>
+      </table>
+    <?php else: ?>
+      <p>There's no AL data.</p>
+    <?php endif; ?>
+  </section>
 
-        </div>
-        <div class="card">
+  <section class="card">
+    <h2>League NL</h2>
+    <?php if ($NL): ?>
+      <table>
+        <tr><th>Index</th><th>Value</th></tr>
+        <tr><td>Number of Player</td><td><?php echo number_format($NL['PlayerCount']); ?></td></tr>
+        <tr><td>Number of Team</td><td><?php echo number_format($NL['TeamCount']); ?></td></tr>
+        <tr><td>Total Salary</td><td><?php echo mf($NL['TotalSalary']); ?></td></tr>
+        <tr><td>Average Salary</td><td><?php echo mf($NL['AvgSalary'], 2); ?></td></tr>
+      </table>
+    <?php else: ?>
+      <p>There's no NL data.</p>
+    <?php endif; ?>
+  </section>
+</div>
 
-        </div>
-        <div class="card">
+<?php
+  $alTotal = (float)$AL['TotalSalary'];
+  $nlTotal = (float)$NL['TotalSalary'];
+  $alAvg   = (float)$AL['AvgSalary'];
+  $nlAvg   = (float)$NL['AvgSalary'];
+  $alPlayers = (int)$AL['PlayerCount'];
+  $nlPlayers = (int)$NL['PlayerCount'];
+  $alTeams   = (int)$AL['TeamCount'];
+  $nlTeams   = (int)$NL['TeamCount'];
 
-        </div>
-        <div class="card">
+  // 총연봉/평균연봉 승자 및 차이
+  $totalWinner = ($alTotal === $nlTotal) ? '동일' : (($alTotal > $nlTotal) ? 'AL' : 'NL');
+  $avgWinner   = ($alAvg   === $nlAvg)   ? '동일' : (($alAvg   > $nlAvg)   ? 'AL' : 'NL');
+  $totalDiff   = abs($alTotal - $nlTotal);
+  $avgDiff     = abs($alAvg   - $nlAvg);
 
-        </div><div class="card">
+  // 총 연봉은 NL 리그가 더 높습니다 ($ 차이)
+  $totalSentence = ($totalWinner === '동일') 
+    ? "Total Salaries of Two Leagues are identical."
+    : "Total Salary is higher in {$totalWinner} League (" . mf($totalDiff) . " different)";
+  // 평균 연봉은 AL 리그가 더 높습니다 ($ 차이)
+  $avgSentence = ($avgWinner === '동일')
+    ? "Average Salaries of Two Leagues are identical."
+    : "Average Salary is higher in {$avgWinner} League (" . mf($avgDiff, 2) . " different)";
 
-        </div><div class="card">
+  // 요약: 총 연봉은 NL 리그가 더 높지만, 평균 연봉은 AL 리그가 더 높습니다.
+  $crossSentence = '';
+  if ($totalWinner !== '동일' && $avgWinner !== '동일' && $totalWinner !== $avgWinner) {
+    $crossSentence = "Summary: Total Salary is higher in {$totalWinner} League, but average salary is higher in {$avgWinner} League.";
+  }
+  // 참여 선수 수: AL -명 vs NL -명 , 팀 수: AL -팀 vs NL -팀
+  $playerNote = "Number of Players: AL " . number_format($alPlayers) . " vs NL " . number_format($nlPlayers) . "";
+  $teamNote   = "Number of Teams: AL " . number_format($alTeams) . " vs NL " . number_format($nlTeams) . "";
 
-        </div>
-    </div>     
-    
+?>
 
+<section class="card">
+  <h2>Conclusion (<?php echo htmlspecialchars($year); ?>)</h2>
+  <?php if ($AL && $NL): ?>
+    <ul>
+      <li><?php echo $totalSentence; ?></li><br/>
+      <li><?php echo $avgSentence; ?></li><br/>
+      <?php if ($crossSentence): ?><li><?php echo $crossSentence; ?></li><br/><?php endif; ?>
+      <li><?php echo $playerNote; ?></li><br/>
+      <li> <?php echo $teamNote; ?></li>
+    </ul>
+  <?php else: ?>
+    <p>You need AL/NL data both to make conclusion</p>
+  <?php endif; ?>
+</section>
 
-<script>
-    // 페이지 로드 시 연도 목록 불러오기
-    window.addEventListener('DOMContentLoaded', loadYears);
-
-    function loadYears() {
-        fetch('game_roster.php?action=getYears')
-            .then(res => res.json())
-            .then(years => {
-                const select = document.getElementById('yearSelect');
-                years.forEach(year => {
-                    const option = document.createElement('option');
-                    option.value = year;
-                    option.textContent = `${year}`;
-                    select.appendChild(option);
-                });
-            })
-            .catch(err => showError('Failed to load year data.'));
-    }
-
-    // 연도 선택 시 경기 목록 불러오기
-    document.getElementById('searchBtn').addEventListener('click', function() {
-        const yearID = document.getElementById('yearSelect').value;
-        console.log("yearID:" +yearID);
-
-        if (yearID) {
-            fetch(`game_roster.php?action=getGames&yearID=${yearID}`)
-                .then(res => res.json())
-                .then(games => {
-                    console.log(games);
-                    games.forEach(gameID => {
-                        // 여기 수정해서 연도별 리그 정보 가져오기, 리그명 -> 각각의 연봉 가져오기
-                        const option = document.createElement('option');
-                        option.value = gameID;
-                        const gameType = gameID.includes('ALS') ? 'American League All-Star' :
-                            gameID.includes('NLS') ? 'National League All-Star' : gameID;
-                        option.textContent = gameType;
-                    });
-                })
-                .catch(err => {
-                    console.error('fetch error:', err);
-                    showError('경기 목록을 불러오는데 실패했습니다.');
-                }); 
-        }
-    });
-
-    </script>
-        <?php
-        $conn->close();
-        ?>
+<div class='foot'><a href='index.php'>Go to main</a></div>
     </div>
 </body>
-
-
 </html>
+<?php $conn->close(); ?>
