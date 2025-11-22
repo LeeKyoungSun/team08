@@ -22,14 +22,14 @@ include 'db_connect.php';
         .header h1 {
             margin: 0;
         }
-        
+
         .chart-container{
             /* display: flex; */
             /* width: 40%; */
             /* color:var(--text-color); */
             /* margin-top: 40px; */
         }
-        
+
         .results-container {
             display: none ;
         }
@@ -46,8 +46,8 @@ include 'db_connect.php';
 
         }
         th,td{
-            text-align: center; 
-            border: 1px solid #ddd; padding: 8px; 
+            text-align: center;
+            border: 1px solid #ddd; padding: 8px;
         }
         #rosterTableBody tr:last-child{
             background-color: var(--secondary-accent-color);
@@ -63,44 +63,44 @@ include 'db_connect.php';
 </head>
 
 <body>
-    <div class="layout">
-        <?php
-        include 'pages/nav.php';
-        ?>
-        <h1>Get Position Distribution <br/>& Players List.</h1>
-        <div>
-            Get Position distribution & Players who played the game.<br/>
-            you can filter the games by the year and game Num. 
+<div class="layout">
+    <?php
+    include 'pages/nav.php';
+    ?>
+    <h1>Get Position Distribution <br/>& Players List.</h1>
+    <div>
+        Get Position distribution & Players who played the game.<br/>
+        you can filter the games by the year and game Num.
+    </div>
+
+
+    <div class="form-section">
+        <div class="form-row">
+            <div class="form-group">
+                <label for="yearSelect"> Year </label>
+                <select id="yearSelect">
+                    <option value="">-- Select Year --</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="gameSelect"> League</label>
+                <select id="gameSelect" disabled>
+                    <option value="">-- Select Year First--</option>
+                </select>
+            </div>
         </div>
 
-        
-   <div class="form-section">
-       <div class="form-row">
-           <div class="form-group">
-               <label for="yearSelect"> Year </label>
-               <select id="yearSelect">
-                   <option value="">-- Select Year --</option>
-               </select>
-           </div>
+        <button id="btn" disabled> Get Result </button>
+    </div>
 
-           <div class="form-group">
-               <label for="gameSelect"> League</label>
-               <select id="gameSelect" disabled>
-                   <option value="">-- Select Year First--</option>
-               </select>
-           </div>
-       </div>
+    <div id="loadingDiv" class="loading" style="display:none;">
+        Loading Data
+    </div>
 
-       <button id="btn" disabled> Get Result </button>
-   </div>
+    <div id="errorDiv" class="error-message" style="display:none;"></div>
 
-   <div id="loadingDiv" class="loading" style="display:none;">
-       Loading Data
-   </div>
-
-   <div id="errorDiv" class="error-message" style="display:none;"></div>
-
-   <div id="resultsContainer" class="results-container">
+    <div id="resultsContainer" class="results-container">
         <br/>
         <h2>Position distribution</h2>
         <div class="chart-wrapper">
@@ -126,12 +126,12 @@ include 'db_connect.php';
         <!-- <div>여기에 경기별 player 명단 들어갈 예정</div> -->
         <div>
             <table>
-                <thread>
-                    <tr>
+                <thead>
+                <tr>
                     <th>Position</th>
                     <th>Player Name</th>
-                    </tr>
-                </thread>
+                </tr>
+                </thead>
                 <tbody id="player-list"></tbody>
             </table>
         </div>
@@ -157,7 +157,7 @@ include 'db_connect.php';
                     select.appendChild(option);
                 });
             })
-            .catch(err => showError('연도 목록을 불러오는데 실패했습니다.'));
+            .catch(() => showError('연도 목록을 불러오는데 실패했습니다.'));
     }
 
     // 연도 선택 시 경기 목록 불러오기
@@ -187,7 +187,7 @@ include 'db_connect.php';
                 .catch(err => {
                     console.error('fetch error:', err);
                     showError('경기 목록을 불러오는데 실패했습니다.');
-                }); 
+                });
         }
     });
 
@@ -214,7 +214,7 @@ include 'db_connect.php';
                 console.log(data);
                 if (data.error) {
                     console.log(data.error);
-                } 
+                }
                 else if (data.success) {
                     displayResults(data.roster);
                     num=data.roster.length-1;
@@ -227,7 +227,7 @@ include 'db_connect.php';
                     console.log(data);
                     if (data.error) {
                         console.log(data.error);
-                    } 
+                    }
                     else if (data.success) {
                         console.log(num);
                         displayList(data.players, num);
@@ -239,8 +239,8 @@ include 'db_connect.php';
                 console.error('fetch error:', err);
                 showError('데이터를 불러오는데 실패했습니다.');
             });
-            
-        
+
+
     });
 
     function displayResults(roster) {
@@ -252,7 +252,7 @@ include 'db_connect.php';
         displayPieChart(positions, totalCount);
         // displayBarChart(positions);
         displayTable(roster, totalCount);
-        
+
 
         document.getElementById('resultsContainer').classList.add('active');
     }
@@ -343,9 +343,9 @@ include 'db_connect.php';
     function displayList(players,positionNum) {
         const tbody = document.getElementById('player-list');
         tbody.innerHTML = `
-              
+
                 `
-        
+
         for (let i=0;i<positionNum;i++){
             const row = tbody.insertRow();
             row.innerHTML = `
@@ -354,7 +354,7 @@ include 'db_connect.php';
                     <td><span id="player-name-${i}"> </span></td>
                 </tr>
                 `;
-            }
+        }
 
         players.forEach(item => {
             // const row = tbody.insertRow();
@@ -379,17 +379,18 @@ include 'db_connect.php';
     }
 
     function hideResults() {
-            document.getElementById('resultsContainer').classList.remove('active');
-            console.log(document.getElementById('resultsContainer').classList);
+        document.getElementById('resultsContainer').classList.remove('active');
+        console.log(document.getElementById('resultsContainer').classList);
     }
-    </script>
+</script>
 
+<?php
+if (isset($conn)) {
+    $conn->close();
+}
+?>
 
-        <?php
-        $conn->close();
-        ?>
-    </div>
+</div>
 </body>
-
 
 </html>

@@ -23,10 +23,17 @@ if (isset($_GET['action'])) {
         exit;
     }
 
-    // 특정 연도의 경기 목록 조회
+    // 특정 연도의 경기 목록 조회 (player count가 1보다 큰 게임만)
     if ($_GET['action'] === 'getGames' && isset($_GET['yearID'])) {
         $yearID = $_GET['yearID'];
-        $sql = "SELECT DISTINCT gameID FROM AllstarFull WHERE yearID = ? ORDER BY gameID";
+        $sql = "
+            SELECT gameID 
+            FROM AllstarFull 
+            WHERE yearID = ? 
+            GROUP BY gameID 
+            HAVING COUNT(*) > 1 
+            ORDER BY gameID
+        ";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $yearID);
         $stmt->execute();
@@ -154,4 +161,9 @@ if (isset($_GET['action'])) {
     }
 }
 
+// API 엔드포인트가 아닌 직접 접근 시
+// 모든 API 요청은 위에서 exit;로 종료되므로 여기까지 도달하지 않음
+if (isset($conn)) {
+    $conn->close();
+}
 ?>
