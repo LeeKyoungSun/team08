@@ -12,7 +12,9 @@ $year = isset($_GET['year']) ? intval($_GET['year']) : 2015;
     <title>선수 연봉 순위</title>
     <link rel="stylesheet" href="css/main.css"/>
     <style>
-        body { font-family: sans-serif; margin: 20px; }
+        body { font-family: sans-serif; 
+            /* margin: 20px;  */
+        }
         form { 
             /* text-align: center; */
              margin-bottom: 20px; }
@@ -58,10 +60,11 @@ $year = isset($_GET['year']) ? intval($_GET['year']) : 2015;
     </style>
 </head>
 <body>
+    <?php
+    include 'pages/nav.php';
+    ?>
     <div class="layout">
-        <?php
-        include 'pages/nav.php';
-        ?>
+        
     <h1>Get Annual Salary Ranking <br/>by player with your form.</h1>
     <div>
         Get annual salary ranking by player with your form.<br/>

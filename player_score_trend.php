@@ -55,8 +55,9 @@ include 'db_connect.php';
 </head>
 
 <body>
-<div class="layout">
     <?php include 'pages/nav.php'; ?>
+<div class="layout">
+    
 
     <h1>Get Score Trend by Player</h1>
     <div>

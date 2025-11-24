@@ -10,7 +10,9 @@ include 'db_connect.php';
     <title>Baseball Analytics</title>
     <link rel="stylesheet" href="css/main.css"/>
     <style>
-        body { font-family: sans-serif; margin: 20px; }
+        body { font-family: sans-serif; 
+            /* margin: 20px;  */
+        }
         .header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px;}
         .wrap{ 
             width: 80%;
@@ -18,7 +20,11 @@ include 'db_connect.php';
             display:flex;
             flex-direction:column;
         }
-        .stage{flex:1;position:relative;overflow:hidden;}
+        .stage{
+            /* z-index: ; */
+            flex:1;
+            position:relative;
+            overflow:hidden;}
 
         .mainflex{
             display:flex ;
@@ -35,19 +41,27 @@ include 'db_connect.php';
             justify-content:center;
             align-items:center;opacity:0;
             transition:opacity 0.8s ease;
+            z-index: 0;
         }
         .img-box.active{opacity:1;}
         .img-box img{max-width:100%;max-height:100%;object-fit:contain;}
 
-        .info{position:absolute;bottom:12px;right:16px;font-size:14px;color:#ddd;background:rgba(0,0,0,0.4);padding:4px 10px;border-radius:6px}
+        .info{position:absolute;
+            bottom:12px;right:16px;font-size:14px;color:#ddd;background:rgba(0,0,0,0.4);padding:4px 10px;border-radius:6px}
+        
+        body{
+            z-index: 1;
+        }
+        
     </style>
 </head>
 <body>
+    <?php
+    include 'pages/nav.php';
+    ?>
     <div class="layout">
     <!-- 로그인/회원가입  -->
-        <?php
-        include 'pages/nav.php';
-        ?>
+       
     <div class="mainflex">
         <div>
             <h1>Baseball Analytics</h1>

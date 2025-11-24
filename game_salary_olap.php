@@ -137,11 +137,12 @@ function mf($v, $dec = 0) { // money format
 </style>
 </head>
 <body>
-  <div class="layout">
-
   <?php
   include 'pages/nav.php';
   ?>
+  <div class="layout">
+
+ 
   <h1>Salary Comparison by League</h1>
 
 <form method="GET" action="game_salary_olap.php">-
