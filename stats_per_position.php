@@ -165,10 +165,11 @@ $result = $stmt->get_result();
 </head>
 
 <body>
+      <?php
+      include 'pages/nav.php';
+      ?>
   <div class="layout">
-    <?php
-    include 'pages/nav.php';
-    ?>
+
     <h1>Get Score of Players by Position </h1>
     <div>
       Get Score of Players by Position. <br />

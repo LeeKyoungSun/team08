@@ -63,10 +63,11 @@ include 'db_connect.php';
 </head>
 
 <body>
-<div class="layout">
     <?php
     include 'pages/nav.php';
     ?>
+<div class="layout">
+    
     <h1>Get Position Distribution <br/>& Players List.</h1>
     <div>
         Get Position distribution & Players who played the game.<br/>

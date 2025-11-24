@@ -5,10 +5,11 @@
     <link rel="stylesheet" href="css/main.css"/>
 </head>
 <body id="userPage">
-    <div class="layout">
     <?php
-        include 'pages/nav.php';
-        ?>
+    include 'pages/nav.php';
+    ?>
+    <div class="layout">
+   
     <h1>Sign Up</h1>
     <form action="register_process.php" method="POST">
         <div>

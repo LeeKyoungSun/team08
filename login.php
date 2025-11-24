@@ -7,10 +7,11 @@
     </style>
 </head>
 <body id="userPage">
-    <div class="layout">
     <?php
     include 'pages/nav.php';
     ?>
+    <div class="layout">
+    
     <h1>Login</h1>
     <form action="login_process.php" method="POST">
         <div>

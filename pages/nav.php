@@ -67,6 +67,9 @@
         nav .login-menu{
             float: right;
         }
+        nav{
+            background-color: var(--background-color);
+        }
     </style>
 </head>
 <body>
