@@ -113,10 +113,8 @@ team08/
 ### 📂 2. 프로젝트 폴더 배치 (Deployment)
 
 본 프로젝트는 **XAMPP 웹 루트 디렉토리** 내에서 실행되어야 합니다.
-다운로드 받은 `team08` 폴더 전체를 아래 경로에 위치시켜 주세요.
 
-  * **필수 경로:** `C:\xampp\htdocs\team08`
-  * **접속 주소:** `http://localhost/team08`
+다운로드 받은 `team08` 폴더 전체를 `htdocs` 디렉토리 하위에 위치시켜 주세요. (ex. htdocs/team08)
 
 ### ⚙️ 3. DATABASE (MySQL) 구축 방법
 
