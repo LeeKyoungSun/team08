@@ -1,4 +1,5 @@
 -- dbcreate.sql
+-- 2170045 서자영
 
 CREATE DATABASE IF NOT EXISTS team08 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
