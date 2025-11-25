@@ -1,4 +1,5 @@
 <?php
+// 2170045 서자영
 session_start();
 if (!isset($_SESSION['userid'])) {
     echo "<script>alert('로그인이 필요합니다.'); location.href='login.php';</script>";
