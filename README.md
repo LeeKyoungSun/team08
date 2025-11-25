@@ -54,21 +54,21 @@
 -----
 
 ## 3\. 데이터베이스 구조 (Database Schema)
-<img width="1572" height="1046" alt="image" src="https://github.com/user-attachments/assets/0434b1d3-8453-4256-88fb-63a1de7c494f" />
+<img width="1572" height="1046" alt="image" src="https://github.com/user-attachments/assets/0c36798a-9aa5-4454-af20-6339c3b17d11" />
 
 총 8개의 테이블로 구성된 **Star Schema** 유사 구조를 가집니다.
 
   * **Dimension Tables (기준 정보)**
-    * Master: 선수 정보
-    * Teams: 팀 정보
+      * Master: 선수 정보
+      * Teams: 팀 정보
   * **Fact Tables (성적 데이터)**
-    * Batting: 타자 기록
-    * Pitching: 투수 기록
-    * Fielding: 수비 기록
-    * Salaries: 선수 연봉 정보
-    * AllstarFull: 올스타전 출전 및 포지션 기록
+      * Batting: 타자 기록
+      * Pitching: 투수 기록
+      * Fielding: 수비 기록
+      * Salaries: 선수 연봉 정보
+      * AllstarFull: 올스타전 출전 및 포지션 기록
   * **Management Table**
-    * Users: 회원 정보
+      * Users: 회원 정보
 
 -----
 
@@ -78,12 +78,12 @@
 team08/
 ├── .idea/                 # IDE 설정 폴더
 ├── css/                   # 웹페이지 스타일시트 (.css) 저장 폴더
-├── images/                # 이미지 리소스 (ERD, 메인 이미지 등)
+├── images/                # 이미지 리소스
 ├── pages/                 # 공통 컴포넌트 폴더 (nav.php)
-├── source/                # 소스 코드 백업
+├── source/                # dataset raw file
 ├── sql/                   # DB 스크립트 (dbcreate.sql, dbinsert.sql)
 ├── .gitignore             # Git 제외 설정
-├── README.md              # 프로젝트 설명서
+├── README.md              # 프로젝트 설명
 ├── db_connect.php         # [Core] MySQLi 객체 생성 및 utf8mb4 Charset 설정
 ├── db_connect_test.php    # [Util] Users 테이블 존재 여부로 DB 연결 상태 점검
 ├── delete_account.php     # [Auth/View] 회원 탈퇴 전 재확인 페이지
@@ -110,7 +110,15 @@ team08/
   * **Database:** `team08`
   * **Account(ID/PW):** `team08` / `team08`
 
-### ⚙️ 2. DATABASE (MySQL) 구축 방법
+### 📂 2. 프로젝트 폴더 배치 (Deployment)
+
+본 프로젝트는 **XAMPP 웹 루트 디렉토리** 내에서 실행되어야 합니다.
+다운로드 받은 `team08` 폴더 전체를 아래 경로에 위치시켜 주세요.
+
+  * **필수 경로:** `C:\xampp\htdocs\team08`
+  * **접속 주소:** `http://localhost/team08`
+
+### ⚙️ 3. DATABASE (MySQL) 구축 방법
 
 #### 1단계: XAMPP 서버 실행
 
@@ -120,7 +128,7 @@ team08/
 #### 2단계: DB 생성 및 데이터 로드 (CMD 사용)
 
 1.  Windows CMD(명령 프롬프트) 실행.
-2.  프로젝트의 `sql` 폴더로 이동. (예시 경로)
+2.  프로젝트의 `sql` 폴더로 이동. (위의 필수 경로에 폴더를 배치했다고 가정)
     ```cmd
     cd C:\xampp\htdocs\team08\sql
     ```
