@@ -1,61 +1,160 @@
+# ⚾ Team08 Baseball Analytics (칼퇴기원) ⚾
 
-# ⚾ team08 칼퇴기원 야구 빅데이터 분석 프로젝트 ⚾
-
-## 1\. 프로젝트 환경
-
-  * **Server:** XAMPP (Apache, MariaDB)
-  * **Language:** PHP, SQL
-  * **Database:** `team08`
-  * **Account(ID/PW):** `team08` / `team08`
+**Kaggle Baseball Databank**의 오픈소스 데이터를 활용한 **야구 빅데이터 분석 웹 플랫폼**입니다.
+1871년부터 2015년까지의 방대한 메이저리그 데이터를 기반으로, 단순한 기록 조회를 넘어 **OLAP, Window Functions, Ranking** 등 고급 SQL 기법을 적용하여 다차원적인 분석 정보를 제공합니다.
 
 -----
 
-## 2\. DATABASE (MariaDB) 구축 방법
+## 1\. 프로젝트 개요 및 팀원 (Team Info)
 
-### 1단계: XAMPP 서버 실행
+### 👥 팀원 및 역할 (Team Members)
+
+| 이름 | 학번 | 담당 역할 (Role) | 주요 업무 |
+|:---:|:---:|:---:|:---|
+| **이경선** | 2271107 | BE / Leader | 특정 선수 성적 추이(Trend), 경기별 출전 명단 및 포지션 분포 분석 |
+| **이유진** | 2176279 | FE | UX/UI 개발 및 디자인, 프론트엔드-백엔드 연동, 차트 시각화 |
+| **서자영** | 2170045 | BE / DB | DB 스키마 구축, 랭킹 분석(Ranking), 회원 관리 시스템(Auth), 메인 아키텍처 |
+| **주원교** | 2271103 | BE | 포지션별 선수 성적 비교(Stats), 리그/팀별 연봉 비교(OLAP) |
+
+### 🛠 기술 스택 (Tech Stack)
+
+  * **Frontend:** HTML5, CSS3, JavaScript (Chart.js, AJAX)
+  * **Backend:** PHP (Native)
+  * **Database:** MySQL (Star Schema, Advanced SQL)
+  * **Server:** Apache (XAMPP)
+  * **Environment:** Visual Studio Code, IntelliJ, Git/GitHub
+
+-----
+
+## 2\. 주요 기능 및 구현 로직 (Key Features)
+
+이 프로젝트는 **고급 SQL 쿼리**를 웹 서비스에 실제로 적용하는 데 중점을 두었습니다.
+
+### 📊 고급 분석 (Advanced Analysis)
+
+1.  **OLAP (Rollup & Drill-down)**
+      * **기능:** 리그별, 팀별 연봉 총합 및 평균을 계층적으로 집계하여 비교합니다.
+      * **핵심 기술:** `GROUP BY ... WITH ROLLUP`을 사용하여 소계(Subtotal)와 총계(Grand Total)를 한 번의 쿼리로 산출했습니다.
+2.  **Ranking System**
+      * **기능:** 연도별 선수 연봉 순위 및 시즌별 팀 승률 순위를 제공합니다.
+      * **핵심 기술:** `RANK() OVER (PARTITION BY ... ORDER BY ...)` 윈도우 함수를 사용하여 그룹 내 순위를 동적으로 계산합니다.
+3.  **Complex Grouping (Aggregates)**
+      * **기능:** 포지션별(투수/타자) 주요 성적을 비교 분석합니다.
+      * **핵심 기술:** Fielding 테이블과 Batting/Pitching 테이블을 조인하고 복합 그룹화하여 데이터를 집계합니다.
+4.  **Windowing (Trend Analysis)**
+      * **기능:** 특정 선수의 5년 이상 성적 변화 추이를 시각화합니다.
+      * **핵심 기술:** PHP 로직과 SQL을 결합하여 전년도 대비 성적 증감을 계산하고 시계열 데이터를 처리합니다.
+
+### 🔐 회원 관리 (Authentication)
+
+  * **CRUD 구현:** 회원가입(Create), 로그인(Read), 정보수정(Update), 탈퇴(Delete) 기능을 완벽하게 구현했습니다.
+  * **보안:** `password_hash()`와 `password_verify()`를 사용하여 비밀번호를 암호화하여 저장합니다.
+  * **세션 관리:** PHP Session을 활용하여 로그인 상태를 유지하고 접근을 제어합니다.
+
+-----
+
+## 3\. 데이터베이스 구조 (Database Schema)
+<img width="1572" height="1046" alt="image" src="https://github.com/user-attachments/assets/0434b1d3-8453-4256-88fb-63a1de7c494f" />
+
+총 8개의 테이블로 구성된 **Star Schema** 유사 구조를 가집니다.
+
+  * **Dimension Tables (기준 정보)**
+    * Master: 선수 정보
+    * Teams: 팀 정보
+  * **Fact Tables (성적 데이터)**
+    * Batting: 타자 기록
+    * Pitching: 투수 기록
+    * Fielding: 수비 기록
+    * Salaries: 선수 연봉 정보
+    * AllstarFull: 올스타전 출전 및 포지션 기록
+  * **Management Table**
+    * Users: 회원 정보
+
+-----
+
+## 4\. 프로젝트 구조 (Directory Structure)
+
+```bash
+team08/
+├── .idea/                 # IDE(IntelliJ/PhpStorm) 프로젝트 설정 폴더
+├── css/                   # 웹페이지 스타일시트 (.css) 저장 폴더
+├── images/                # 메인 페이지 및 UI에 사용되는 이미지 리소스 폴더
+├── pages/                 # 공통 UI 컴포넌트 폴더
+│   └── nav.php            # 공통 네비게이션 바 (모든 페이지에 include 됨)
+├── source/                # 소스 코드 백업 및 초기 개발 파일 보관 폴더
+├── sql/                   # 데이터베이스 스크립트 폴더
+│   ├── dbcreate.sql       # 테이블 생성 쿼리 (Schema 정의)
+│   └── dbinsert.sql       # 초기 데이터 적재 쿼리 (Data Load)
+├── .gitignore             # Git 업로드 제외 파일 목록 설정
+├── README.md              # 프로젝트 설명 및 설치 가이드 문서
+├── db_connect.php         # [Core] DB 연결 객체($conn) 생성 및 설정 공통 모듈
+├── db_connect_test.php    # [Util] DB 연결 상태 테스트용 유틸리티 파일
+├── delete_account.php     # [Auth/View] 회원 탈퇴 전 비밀번호 재확인 UI
+├── delete_account_process.php # [Auth/Logic] 회원 데이터 삭제(DELETE) 및 세션 종료 처리
+├── game_position.php      # [Analysis/View] 경기별 로스터 및 포지션 분포 차트(Pie Chart) UI
+├── game_roster.php        # [API] 경기 ID를 받아 포지션별 인원수 집계(ROLLUP) 후 JSON 반환
+├── game_salary_olap.php   # [Analysis/View] 리그/경기 단위 연봉 분포 분석 (OLAP)
+├── index.php              # [Main] 웹사이트 메인 페이지 (네비게이션 및 레이아웃 포함)
+├── login.php              # [Auth/View] 로그인 입력 폼 UI
+├── login_process.php      # [Auth/Logic] 사용자 인증 및 PHP 세션 생성
+├── logout_process.php     # [Auth/Logic] 세션 파기 및 로그아웃 처리
+├── mypage.php             # [Auth/View] 회원 정보 확인 및 수정 폼 UI
+├── mypage_process.php     # [Auth/Logic] 회원 정보(이름 등) 수정(UPDATE) 처리
+├── player_score_trend.php # [Analysis/View] 특정 선수 성적 추이 그래프(Line Chart) UI
+├── player_trend.php       # [API] 선수 연도별 성적 변화(Windowing) 계산 후 JSON 반환
+├── register.php           # [Auth/View] 신규 회원가입 폼 UI
+├── register_process.php   # [Auth/Logic] 비밀번호 해시 암호화 및 신규 회원 INSERT
+├── salary_ranking.php     # [Analysis/View] 연도별 선수 연봉 순위(RANK 함수) 출력
+├── stats_per_position.php # [Analysis/View] 포지션별(투수/타자) 주요 성적 복합 집계/비교
+├── team_ranking.php       # [Analysis/View] 팀 승률 랭킹 계산 및 공식 랭킹과 비교
+└── team_salary_olap.php   # [Analysis/View] 팀별 연봉 총합/평균 계층적 집계(ROLLUP)
+```
+
+-----
+
+## 5\. 프로젝트 환경 및 설치 방법 (Installation)
+
+### 🖥️ 1. 프로젝트 환경
+
+  * **Server:** XAMPP (Apache, MySQL)
+  * **Database:** `team08`
+  * **Account(ID/PW):** `team08` / `team08`
+
+### ⚙️ 2. DATABASE (MySQL) 구축 방법
+
+#### 1단계: XAMPP 서버 실행
 
 1.  XAMPP Control Panel 실행.
 2.  `Apache`와 `MySQL` 모듈 **[Start]** 버튼 클릭.
 
-### 2단계: DB 생성 및 데이터 로드 (CMD 사용)
+#### 2단계: DB 생성 및 데이터 로드 (CMD 사용)
 
 1.  Windows CMD(명령 프롬프트) 실행.
-
-2.  프로젝트의 `sql` 폴더로 이동. (이하 예시 경로)
-
+2.  프로젝트의 `sql` 폴더로 이동. (예시 경로)
     ```cmd
     cd C:\xampp\htdocs\team08\sql
     ```
-
 3.  `team08` 계정으로 `team08` 데이터베이스에 접속.
-
     > **[중요]** `LOAD DATA` 오류(Error 2068) 방지를 위해 `--local-infile=1` 플래그를 **반드시 포함**해야 함.
-
     ```cmd
     mysql -u team08 -p --local-infile=1 team08
     ```
-
 4.  비밀번호(`team08`) 입력.
-
 5.  `mysql>` 프롬프트가 뜨면, `dbcreate.sql`을 실행하여 테이블 생성.
-
     ```sql
     mysql> source dbcreate.sql;
     ```
-
 6.  `dbinsert.sql`을 실행하여 CSV 원본 데이터 로드. (데이터 양에 따라 시간 소요)
-
     ```sql
     mysql> source dbinsert.sql;
     ```
-
 7.  `exit;`를 입력하여 종료.
 
 -----
 
-## 3\. ※ (필독) `LOAD DATA` 오류 (Error 2068) 해결 방법
+## 6\. ※ (필독) `LOAD DATA` 오류 (Error 2068) 해결 방법
 
-2단계의 3번 명령어(`mysql ... --local-infile=1 ...`)를 실행했음에도 `ERROR 2068`이 발생한다면, 접근 권한 설정이 추가로 필요함.
+2단계의 3번 명령어(`mysql ... --local-infile=1 ...`)를 실행했음에도 `ERROR 2068`이 발생한다면, 접근 권한 설정이 추가로 필요합니다.
 
 ### 1\. 서버 (XAMPP) 설정
 
