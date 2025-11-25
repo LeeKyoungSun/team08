@@ -1,6 +1,7 @@
 <?php
 /*
  * db_connect.php: DB 연결 파일
+ * 2170045 서자영
  */
 
 $host = 'localhost';  
