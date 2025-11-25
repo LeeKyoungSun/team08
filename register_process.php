@@ -1,4 +1,5 @@
 <?php
+// 2170045 서자영
 include 'db_connect.php';
 
 // 폼 데이터 받기
