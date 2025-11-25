@@ -76,38 +76,28 @@
 
 ```bash
 team08/
-├── .idea/                 # IDE(IntelliJ/PhpStorm) 프로젝트 설정 폴더
+├── .idea/                 # IDE 설정 폴더
 ├── css/                   # 웹페이지 스타일시트 (.css) 저장 폴더
-├── images/                # 메인 페이지 및 UI에 사용되는 이미지 리소스 폴더
-├── pages/                 # 공통 UI 컴포넌트 폴더
-│   └── nav.php            # 공통 네비게이션 바 (모든 페이지에 include 됨)
-├── source/                # 소스 코드 백업 및 초기 개발 파일 보관 폴더
-├── sql/                   # 데이터베이스 스크립트 폴더
-│   ├── dbcreate.sql       # 테이블 생성 쿼리 (Schema 정의)
-│   └── dbinsert.sql       # 초기 데이터 적재 쿼리 (Data Load)
-├── .gitignore             # Git 업로드 제외 파일 목록 설정
-├── README.md              # 프로젝트 설명 및 설치 가이드 문서
-├── db_connect.php         # [Core] DB 연결 객체($conn) 생성 및 설정 공통 모듈
-├── db_connect_test.php    # [Util] DB 연결 상태 테스트용 유틸리티 파일
-├── delete_account.php     # [Auth/View] 회원 탈퇴 전 비밀번호 재확인 UI
-├── delete_account_process.php # [Auth/Logic] 회원 데이터 삭제(DELETE) 및 세션 종료 처리
-├── game_position.php      # [Analysis/View] 경기별 로스터 및 포지션 분포 차트(Pie Chart) UI
-├── game_roster.php        # [API] 경기 ID를 받아 포지션별 인원수 집계(ROLLUP) 후 JSON 반환
-├── game_salary_olap.php   # [Analysis/View] 리그/경기 단위 연봉 분포 분석 (OLAP)
-├── index.php              # [Main] 웹사이트 메인 페이지 (네비게이션 및 레이아웃 포함)
-├── login.php              # [Auth/View] 로그인 입력 폼 UI
-├── login_process.php      # [Auth/Logic] 사용자 인증 및 PHP 세션 생성
-├── logout_process.php     # [Auth/Logic] 세션 파기 및 로그아웃 처리
-├── mypage.php             # [Auth/View] 회원 정보 확인 및 수정 폼 UI
-├── mypage_process.php     # [Auth/Logic] 회원 정보(이름 등) 수정(UPDATE) 처리
-├── player_score_trend.php # [Analysis/View] 특정 선수 성적 추이 그래프(Line Chart) UI
-├── player_trend.php       # [API] 선수 연도별 성적 변화(Windowing) 계산 후 JSON 반환
-├── register.php           # [Auth/View] 신규 회원가입 폼 UI
-├── register_process.php   # [Auth/Logic] 비밀번호 해시 암호화 및 신규 회원 INSERT
-├── salary_ranking.php     # [Analysis/View] 연도별 선수 연봉 순위(RANK 함수) 출력
-├── stats_per_position.php # [Analysis/View] 포지션별(투수/타자) 주요 성적 복합 집계/비교
-├── team_ranking.php       # [Analysis/View] 팀 승률 랭킹 계산 및 공식 랭킹과 비교
-└── team_salary_olap.php   # [Analysis/View] 팀별 연봉 총합/평균 계층적 집계(ROLLUP)
+├── images/                # 이미지 리소스 (ERD, 메인 이미지 등)
+├── pages/                 # 공통 컴포넌트 폴더 (nav.php)
+├── source/                # 소스 코드 백업
+├── sql/                   # DB 스크립트 (dbcreate.sql, dbinsert.sql)
+├── .gitignore             # Git 제외 설정
+├── README.md              # 프로젝트 설명서
+├── db_connect.php         # [Core] MySQLi 객체 생성 및 utf8mb4 Charset 설정
+├── db_connect_test.php    # [Util] Users 테이블 존재 여부로 DB 연결 상태 점검
+├── delete_account.php     # [Auth/View] 회원 탈퇴 전 재확인 페이지
+├── delete_account_process.php # [Auth/Logic] DELETE 쿼리로 계정 삭제 및 세션 파기
+├── index.php              # [Main] 메인 페이지 (네비게이션 및 레이아웃 구조)
+├── login.php              # [Auth/View] 로그인 입력 폼
+├── login_process.php      # [Auth/Logic] password_verify로 비밀번호 검증 및 세션 생성
+├── logout_process.php     # [Auth/Logic] session_destroy로 세션 종료 후 메인 리다이렉트
+├── mypage.php             # [Auth/View] 현재 로그인한 사용자 정보 표시 및 이름 수정 폼
+├── mypage_process.php     # [Auth/Logic] UPDATE 쿼리로 회원 이름 수정 및 세션 갱신
+├── register.php           # [Auth/View] 신규 회원가입 입력 폼
+├── register_process.php   # [Auth/Logic] 중복 ID 체크 후 password_hash로 비밀번호 암호화 저장
+├── salary_ranking.php     # [Analysis/View] RANK() 함수로 연도별 선수 연봉 순위 계산 및 출력
+└── team_ranking.php       # [Analysis/View] RANK() 함수로 시즌/리그별 팀 승률 순위 산출 및 공식 랭킹 비교
 ```
 
 -----
