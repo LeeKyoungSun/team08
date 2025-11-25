@@ -1,4 +1,5 @@
 -- dbinsert.sql
+-- 2170045 서자영
 
 USE team08;
 
