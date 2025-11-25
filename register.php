@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="css/main.css"/>
 </head>
 <body id="userPage">
+    <!-- 2170045 서자영 -->
     <?php
     include 'pages/nav.php';
     ?>
