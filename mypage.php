@@ -1,4 +1,5 @@
 <?php
+// 2170045 서자영
 session_start();
 
 if (!isset($_SESSION['userid'])) {
