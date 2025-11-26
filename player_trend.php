@@ -1,9 +1,6 @@
 <?php
-/*
- * player_trend.php: Window 함수를 사용하여 특정 선수의 연도별 성적 추이를 보여줌
- * 프론트엔드: 팀 선택 → 선수 선택 (드롭다운), 꺾은선 그래프
- */
-
+// player_trend.php
+// 2271107 이경선
 // 1. DB 연결
 require_once 'db_connect.php';
 

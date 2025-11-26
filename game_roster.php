@@ -1,8 +1,6 @@
 <?php
-/*
- * game_roster.php: GROUP BY WITH ROLLUP을 사용하여 경기별 출전 명단과 포지션별 인원수를 집계
- * 프론트엔드: 연도 선택 → 경기 선택 (드롭다운), 원 그래프
- */
+// game_roster.php
+// 2271107 이경선
 
 // 1. DB 연결
 require_once 'db_connect.php';

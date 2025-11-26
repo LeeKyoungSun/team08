@@ -1,4 +1,7 @@
 <?php
+// player_score_trend.php
+// 2176279 이유진
+// 2271107 이경선
 session_start();
 include 'db_connect.php';
 ?>
